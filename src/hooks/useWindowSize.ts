@@ -9,16 +9,25 @@ export const useWindowSize = () => {
     height: undefined,
   });
 
+  // Set initial height only once on mount
+  useEffect(() => {
+    setWindowSize((prev) => ({
+      ...prev,
+      height: window.innerHeight,
+    }));
+  }, []);
+
+  // Update width on resize
   useEffect(() => {
     function handleResize() {
-      setWindowSize({
+      setWindowSize((prev) => ({
+        ...prev,
         width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      }));
     }
 
     window.addEventListener("resize", handleResize);
-    handleResize();
+    handleResize(); // Initialize width
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
